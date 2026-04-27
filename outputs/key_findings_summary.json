@@ -1,0 +1,16 @@
+{
+  "total_orders": 12000,
+  "total_revenue": 2054589.16,
+  "total_profit": 214040.75,
+  "overall_margin_pct": 10.42,
+  "worst_segment": {
+    "product_category": "Electronics",
+    "region": "EU",
+    "total_profit": -42103.66,
+    "profit_margin_pct": -17.53,
+    "avg_discount": 0.3025
+  },
+  "avg_margin_high_discount_pct": -5.96,
+  "avg_margin_low_discount_pct": 25.31,
+  "profit_gap_high_vs_low_discount_pct_points": 31.27
+}
