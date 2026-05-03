@@ -1,36 +1,110 @@
-## 📊 Dashboard Preview
+## Dashboard preview
 
 ![Dashboard](dashboard.png)
 
-# 📊 E-Commerce Profit Leak Analysis
+# E-commerce profit leak analysis
 
-## 🧠 Business Context
+Portfolio case for **junior Data Analyst / Business Analyst** roles: connect order-level data to a clear profitability story, segment leaks, quantify discount risk, and turn findings into prioritized actions a commercial team can use.
 
-Despite generating $2.05M in revenue, the company delivers only $214K in profit, resulting in a low overall margin of 10.42%.
+---
 
-This gap between revenue and profitability indicates significant margin erosion, likely driven by:
+## The profitability problem (what the business is really solving)
 
-- aggressive discounting strategies
-- inefficient regional performance
-- cost structure imbalances
+Revenue looks healthy, but **margin is thin and uneven**. In this dataset the business books **$2,054,589.16** revenue and **$214,040.75** profit, so the **overall margin is 10.42%** across **12,000** orders (January 2024 → December 2025)—i.e. **about 10.4 cents of profit per dollar of revenue** on average—acceptable only if it is stable and deliberate. The analysis shows it is not: **specific categories and regions lose money**, and **deep discounting turns volume into negative profit**. The core question is not “Are we selling?” but **“Which sales build profit, and which erode it?”**
 
-The objective of this project is to identify, quantify, and prioritize profit leakage sources, and provide actionable strategies to improve profitability.
+---
 
+## Key profit leaks (ranked by business urgency)
 
+These are the main **structural leaks** called out in the analysis—each ties to a segment or behavior you can monitor and fix.
 
-## 🎯Objectives
+| Priority | Leak | What the data shows | Why it matters |
+|----------|------|---------------------|----------------|
+| 1 | **Electronics in EU** | Profit **-$42,103.66**, margin **-17.53%**, average discount **30.25%** | Largest single drain; this segment alone erodes **nearly 20%** of total company profit ($42,103.66 vs $214,040.75). |
+| 2 | **EU region overall** | Revenue **$533,005.54** but profit only **$5,890.14**, margin **1.11%** | High revenue with almost no margin suggests pricing, discount, or cost-to-serve issues concentrated in Europe—not a “small market” problem. |
+| 3 | **Home & Kitchen in LATAM** | Profit **-$3,983.51**, margin **-8.37%** | Secondary loss pocket; worth fixing after the EU/Electronics crisis or in parallel if resources allow. |
+| 4 | **Loss-making orders** | **16.01%** of orders are loss-making | One in six orders destroys value at the transaction level—weak governance on price and discount unless strategically intentional. |
 
-- Identify loss-making segments across product categories and regions
-- Analyze the impact of discounting on profitability
-- Detect structural weaknesses in business performance
-- Provide data-driven recommendations to restore margin
+**Context:** Other regions in the same outputs perform much stronger on margin (for example **NA ~15.1%** and **APAC ~15.6%** profit margin on revenue in `outputs/profit_by_region.csv`), which makes the **EU at 1.11%** stand out as a **regional profitability imbalance**, not a universal slowdown.
 
+---
 
+## Discount impact (how promotions hurt or help)
 
-## 📂 Project Structure
+Discounting is not “neutral” here—it **separates profitable volume from value destruction**.
+
+- **Orders with discount ≥ 25%** generated **-$40,234.94** profit in aggregate.
+- **Orders with discount below 15%** generated **$166,114.56** profit in aggregate.
+
+So **aggressive tiers** are associated with **negative total profit**, while **lighter discounting** carries most of the **positive** profit in the file. Margin also **collapses by discount band**:
+
+- **0–5% discount:** **34.84%** margin  
+- **30–45% discount:** **-14.75%** margin  
+
+**Business read:** the company is at risk of **buying revenue with discounts** that the P&L cannot support. Any promotion or approval workflow should be checked against **margin at band**, not only uplift in units or revenue.
+
+---
+
+## Priority actions (what to do first)
+
+Actions below **only restate recommendations supported by the numbers above**—no new ROI or savings targets are invented.
+
+1. **P0 — Stop unguarded deep discounts**  
+   Introduce **margin-based discount guardrails** (caps and approvals by category/region, alerts before margin goes negative). Directly addresses the **≥25% discount** loss pool and the **Electronics / EU** discount level (**30.25%** average).
+
+2. **P0 — EU commercial reset**  
+   **EU pricing, promotions, and cost-to-serve** need a focused review: the region has **strong revenue** but **1.11%** margin. Align with the **Electronics in EU** deep dive first, then roll out region-wide controls.
+
+3. **P1 — LATAM Home & Kitchen**  
+   Investigate **costs, suppliers, logistics, and promo depth** for the **-$3,983.51 / -8.37%** segment so fixes are targeted, not guesswork.
+
+4. **P1 — Shift from volume-only KPIs**  
+   Pair revenue targets with **margin, loss-making order rate, and band-level profitability** so teams are not rewarded for sales that lose money.
+
+---
+
+## Dashboard usage (how a BA or lead would use this week to week)
+
+The dashboard image (`dashboard.png`) and the **`outputs/`** artifacts are meant to support a **short weekly or monthly review**—same metrics, refreshed data:
+
+| Stakeholder question | Where to look |
+|----------------------|----------------|
+| Are we improving overall profitability? | Total revenue, profit, overall margin (dataset summary / summary tiles). |
+| Which region is dragging margin? | Region view — watch **EU** vs **NA/APAC** margin contrast. |
+| Which category burns cash? | Category × region — **Electronics EU** and **Home & Kitchen LATAM** as named leaks. |
+| Are promotions still safe? | Discount bands — **≥25%** vs **below 15%** profit totals; **0–5%** vs **30–45%** margin bands. |
+| How bad is transaction-level leakage? | **16.01%** loss-making orders — trend this down over time. |
+
+**Cadence:** Operations and finance can use the same cuts (region, category, discount band) to **catch leaks early** instead of discovering them quarterly.
+
+---
+
+## Expected business impact (directional, no invented savings)
+
+The analysis does **not** estimate a dollar “uplift” from fixes (that would require pilots and forecasting). **Qualitatively**, if guardrails and EU/LATAM actions work as intended, the business should see:
+
+- **Fewer loss-making orders** (currently **16.01%** of orders).  
+- **Protected margin** on high-discount campaigns (today **≥25%** discounts sum to **negative** profit).  
+- **Stabilized EU profitability** without requiring proportional revenue growth (EU today: **$533,005.54** revenue, **$5,890.14** profit).  
+- **A more sustainable growth model** where promotions are tested against **margin**, not only top-line.
+
+The largest **numerical** opportunity already in the story is **closing or repricing the Electronics EU leak (-$42,103.66)** and **reducing reliance on the discount bands that show negative margin**.
+
+---
+
+## Objectives
+
+- Identify loss-making segments across product categories and regions  
+- Analyze the impact of discounting on profitability  
+- Detect structural weaknesses in business performance  
+- Provide data-driven recommendations to restore margin  
+
+---
+
+## Project structure
 
 ```text
-01_profit_leak_analysis/
+01_profit_leak_case/
 ├── data/
 │   └── ecommerce_orders.csv
 ├── scripts/
@@ -52,326 +126,108 @@ The objective of this project is to identify, quantify, and prioritize profit le
 │   ├── worst_loss_making_segments.png
 │   └── key_findings_summary.json
 └── requirements.txt
+```
 
+---
 
-## 📊 Dataset Overview
+## Dataset overview
 
-Total Orders: 12,000
-Revenue: $2,054,589.16
-Profit: $214,040.75
-Overall Margin: 10.42%
-Date Range: January 2024 → December 2025
-Data Dimensions
-Product Category
-Region
-Customer ID
-Order Date
-Discount
-Columns
-order_id
-customer_id
-product_category
-region
-order_date
-revenue
-cost
-discount
+| Metric | Value |
+|--------|--------|
+| Total orders | 12,000 |
+| Revenue | $2,054,589.16 |
+| Profit | $214,040.75 |
+| Overall margin | 10.42% |
+| Date range | January 2024 → December 2025 |
 
+**Dimensions:** product category, region, customer ID, order date, discount.
 
-## 🔍 Analytical Approach
+**Columns:** `order_id`, `customer_id`, `product_category`, `region`, `order_date`, `revenue`, `cost`, `discount`
 
-The analysis focuses on identifying profitability drivers using:
+---
 
-Profit calculation: profit = revenue - cost
-Segment-level performance analysis by category and region
-Discount impact analysis
-Identification of negative-profit segments
-Concentration of profit leakage
+## Analytical approach
 
+- **Profit at order level:** profit = revenue − cost  
+- **Segment performance:** category and region  
+- **Discount impact:** bands and thresholds (e.g. ≥25% vs below 15%)  
+- **Loss concentration:** worst segments and share of loss-making orders  
 
-## 🚨 Key Insights
+---
 
-1. Critical Profit Leak: Electronics in EU
+## Additional insights (supporting detail)
 
-The Electronics category in the EU is the largest source of profit leakage.
+- **Electronics EU** remains the headline leak (figures in table above).  
+- **Discount strategy:** high discounts are not producing profitable growth in this slice—the **≥25%** vs **below 15%** profit split makes that explicit.  
+- **Secondary segment:** **Home & Kitchen LATAM** at **-$3,983.51** and **-8.37%** margin suggests cost or pricing issues beyond discounting alone.  
+- **Governance:** **16.01%** loss-making orders points to weak **pricing and promotion controls** unless those orders are strategically subsidized.
 
-Profit: -$42,103.66
-Margin: -17.53%
-Average Discount: 30.25%
+---
 
-This segment alone erodes nearly 20% of total company profit, making it the highest-priority issue to fix.
+## Strategic diagnosis (summary)
 
-2. Structural Weakness in the EU Market
+1. **Uncontrolled discounting** — deep discounts can turn revenue into losses; the band analysis supports strict controls.  
+2. **Regional imbalance** — EU revenue without margin vs stronger regions in the same export set.  
+3. **Limited profitability monitoring** — leadership needs visibility on **segments, discount bands, regions, and loss-making order share** to act before margin erodes.
 
-The EU region generates strong revenue but very weak profitability.
+---
 
-Revenue: $533,005.54
-Profit: $5,890.14
-Margin: 1.11%
+## Recommendations (detailed)
 
-Compared with regions performing around 15% margin, the EU market appears structurally weak.
+1. **Margin-based discount guardrails** — category/region caps, approvals above **25%**, alerts when projected margin is negative (targets the documented discount loss).  
+2. **Profit-driven growth** — favor targeted promos, loyalty, segmentation, and margin-aware campaigns instead of blanket discounts.  
+3. **Fix EU pricing and cost mix** — reduce excessive discounting, review pricing, review logistics/ops cost, weekly category margin reviews.  
+4. **Home & Kitchen LATAM** — validate supplier, shipping, fulfillment, and promotion exposure; renegotiate or reprice as findings support.  
+5. **Profit leak monitoring dashboard** — track revenue, profit, overall margin, margin by region/category, discount-band profitability, top loss-making segments, and **percentage of loss-making orders**.
 
-This may indicate:
+---
 
-excessive discounting
-misaligned pricing strategy
-higher cost-to-serve
-weaker margin control
-3. Discounting Strategy is Destroying Profitability
-
-High discounts are not generating profitable growth.
-
-Orders with discount ≥ 25% generated -$40,234.94 profit
-Orders with discount < 15% generated $166,114.56 profit
-
-This shows that aggressive discounting is creating revenue volume but destroying margin.
-
-4. Margin Collapses as Discount Levels Increase
-
-Profitability decreases sharply as discounts increase.
-
-0–5% discount: 34.84% margin
-30–45% discount: -14.75% margin
-
-This is a major warning sign: the company is selling more, but not protecting profitability.
-
-5. Secondary Profit Leak: Home & Kitchen in LATAM
-
-The second major loss-making segment is Home & Kitchen in LATAM.
-
-Profit: -$3,983.51
-Margin: -8.37%
-
-This suggests that the issue is not only discounting, but also possibly:
-
-high logistics cost
-weak supplier margins
-inefficient cost structure
-unsuitable pricing strategy for the region
-
-6. High Share of Loss-Making Orders
-
-A total of 16.01% of orders are loss-making.
-
-This indicates weak pricing governance and a lack of automated margin protection rules.
-
-The company should not allow such a high percentage of transactions to generate negative profit unless there is a clear strategic reason, such as customer acquisition or retention.
-
-## 🧠 Strategic Diagnosis
-
-The company faces three major structural problems:
-
-1. Uncontrolled Discounting
-
-Discounts are being applied without enough margin protection.
-
-The data shows that deep discounts can turn revenue into losses.
-
-2. Regional Profitability Imbalance
-
-The EU region has high revenue but almost no margin.
-
-This suggests that revenue growth alone is not enough. The company needs to optimize pricing, costs, and promotional strategy by region.
-
-3. Lack of Profitability Monitoring
-
-The company needs better visibility on:
-
-which segments lose money
-which discount levels destroy margin
-which regions underperform
-which customers or categories generate value
-
-Without this monitoring, management may continue pushing sales while profitability deteriorates.
-
-
-## What I Would Present to a Business Team
-
-Problem:
-The company generates strong revenue but loses profitability because some segments destroy margin.
-
-Finding:
-Electronics in EU generates a negative margin of -17.53%, and orders with discounts above 25% generate negative total profit.
-
-Decision:
-Introduce margin-based discount guardrails and review EU pricing strategy.
-
-Expected Impact:
-Reduce loss-making orders, protect margins, and improve profit without necessarily increasing revenue.
-
-
-## 💡 Recommendations
-
-1. Implement Margin-Based Discount Guardrails
-
-The company should define maximum discount thresholds by product category and region.
-
-For example:
-
-lower discount caps for Electronics in EU
-stricter approval process for discounts above 25%
-automatic alerts when projected margin becomes negative
-
-This would prevent campaigns from generating unprofitable revenue.
-
-2. Shift from Volume-Driven Growth to Profit-Driven Growth
-
-The company should stop using blanket discounts as the default growth strategy.
-
-Instead, it should use:
-
-targeted promotions
-loyalty-based offers
-customer segmentation
-margin-aware campaigns
-
-The objective should be to grow profit, not only revenue.
-
-3. Fix the EU Pricing Model
-
-The EU market needs immediate attention because it has strong revenue but very weak profitability.
-
-Recommended actions:
-
-reduce excessive discounting
-review pricing strategy
-analyze logistics and operational costs
-monitor category-level margins weekly
-
-4. Optimize Home & Kitchen in LATAM
-
-For Home & Kitchen in LATAM, the company should investigate whether losses come from:
-
-supplier cost
-shipping cost
-fulfillment cost
-excessive promotions
-
-Recommended actions:
-
-renegotiate supplier contracts
-improve logistics efficiency
-limit discount exposure until margin improves
-
-5. Deploy a Profit Leak Monitoring Dashboard
-
-Management should monitor profit leaks every week using a dashboard tracking:
-
-total revenue
-total profit
-overall margin
-margin by region
-margin by product category
-discount-band profitability
-top loss-making segments
-percentage of loss-making orders
-
-This would allow the company to detect margin problems early instead of reacting after losses accumulate.
-
-
-## 📈  Business Impact
-
-By addressing these issues, the company could:
-
-recover lost margin
-reduce loss-making transactions
-improve profitability without needing more revenue
-build a more sustainable growth model
-make promotions more efficient
-
-The biggest opportunity is not simply to increase sales, but to make current sales more profitable.
-
-
-## ⚙️ How to Run the Project
+## How to run the project
 
 ### 1. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 2. Generate the dataset
+
 ```bash
 python scripts/generate_dataset.py
 ```
 
 ### 3. Run the analysis
+
 ```bash
 python scripts/analyze_profit_leaks.py
 ```
 
 ### 4. Review outputs
-The results are saved in the `outputs/` folder.
 
-This includes:
+Results are saved under **`outputs/`**: cleaned dataset with profit, profit by category/region, discount impact, top customers, worst segments, charts, and **`key_findings_summary.json`**.
 
-cleaned dataset with profit column
-profit by category
-profit by region
-discount impact analysis
-top 10 profitable customers
-worst loss-making segments
-charts and visualizations
-key findings summary
-SQL Analysis
+**SQL:** `sql/profit_analysis_queries.sql` reproduces main aggregates (total profit, profit by category/region, discount bands, loss-making segments).
 
-The file sql/profit_analysis_queries.sql contains SQL queries to reproduce the main business analysis.
+---
 
-It includes:
+## Tools used
 
-total profit calculation
-profit by category
-profit by region
-discount impact by discount band
-loss-making segment analysis
+Python, pandas, matplotlib, SQL, CSV analysis, business analytics, data storytelling.
 
+---
 
-Tools Used
+## Interview explanation (short pitch)
 
-Python
-pandas
-matplotlib
-SQL
-CSV analysis
-Business analytics
-Data storytelling
+I analyzed e-commerce orders to explain why **strong revenue did not translate into strong profitability**. I built **profit at order level**, then cut the data by **category, region, and discount**. The standout was **Electronics in the EU** as the largest leak, with **negative margin** and **high average discount**. I also showed that **orders discounted ≥25%** summed to **negative profit**, while **lower-discount** orders carried **positive** profit. My recommendations were **margin-based discount guardrails**, a **focused EU pricing and promo review**, and a **weekly profit-leak dashboard** aligned to the same KPIs.
 
+---
 
-## 🎤 Interview Explanation
+## Skills demonstrated
 
-If asked to explain this project in an interview, I would say:
+Data cleaning, profitability analysis, SQL, business KPI analysis, discount impact analysis, loss-making segmentation, visualization, recommendations, analytical storytelling.
 
-I analyzed an e-commerce dataset to understand why strong revenue was not translating into strong profitability.
+---
 
-I calculated profit at order level, then analyzed profitability by product category, region, and discount level.
+## Conclusion
 
-The main finding was that Electronics in the EU was the largest profit leak, with negative margin caused by aggressive discounting.
-
-I also found that orders with discounts above 25% generated negative total profit, while low-discount orders remained profitable.
-
-Based on this, I recommended margin-based discount guardrails, a review of EU pricing strategy, and a weekly profit leak monitoring dashboard.
-
-
-## 🚀 Skills Demonstrated
-
-This project demonstrates:
-
-data cleaning
-profitability analysis
-SQL querying
-business KPI analysis
-discount impact analysis
-segmentation of loss-making areas
-data visualization
-business recommendations
-analytical storytelling
-
-
-## ✅ Conclusion
-
-This analysis shows that the company’s profitability problem is not caused by a lack of revenue.
-
-The real issue is that some segments generate high sales volume while destroying margin.
-
-The highest-priority problem is Electronics in EU, followed by Home & Kitchen in LATAM and broader discounting inefficiencies.
-
-By controlling discounts, monitoring margins, and improving regional pricing strategies, the company can increase profitability without necessarily increasing revenue.
+The profitability problem is **not** primarily “too little revenue.” It is **margin erosion in specific segments and discount tiers**, with **Electronics EU** first priority, **EU regional margin** second, **Home & Kitchen LATAM** third, and **deep discounting** as a cross-cutting lever. **Controlling discounts**, **monitoring margins**, and **tightening EU (and LATAM) commercial execution** can improve profit **without** assuming revenue must grow—using only the patterns and magnitudes already present in the data.
