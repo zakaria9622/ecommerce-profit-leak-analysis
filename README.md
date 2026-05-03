@@ -185,6 +185,21 @@ which customers or categories generate value
 Without this monitoring, management may continue pushing sales while profitability deteriorates.
 
 
+## What I Would Present to a Business Team
+
+Problem:
+The company generates strong revenue but loses profitability because some segments destroy margin.
+
+Finding:
+Electronics in EU generates a negative margin of -17.53%, and orders with discounts above 25% generate negative total profit.
+
+Decision:
+Introduce margin-based discount guardrails and review EU pricing strategy.
+
+Expected Impact:
+Reduce loss-making orders, protect margins, and improve profit without necessarily increasing revenue.
+
+
 ## 💡 Recommendations
 
 1. Implement Margin-Based Discount Guardrails
