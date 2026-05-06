@@ -92,6 +92,22 @@ The largest **numerical** opportunity already in the story is **closing or repri
 
 ---
 
+## What I would present to a business team
+
+Problem:
+The company generates strong revenue, but profitability is weakened by specific loss-making segments and aggressive discounting.
+
+Finding:
+Electronics in EU generated -$42,103.66 profit with a -17.53% margin, while orders discounted at 25% or more generated -$40,234.94 profit in aggregate.
+
+Decision:
+Introduce margin-based discount guardrails, review EU pricing, and monitor profitability by region, category, and discount band.
+
+Expected impact:
+Reduce loss-making orders, protect margin, and improve profit quality without depending only on revenue growth.
+
+---
+
 ## Objectives
 
 - Identify loss-making segments across product categories and regions  
