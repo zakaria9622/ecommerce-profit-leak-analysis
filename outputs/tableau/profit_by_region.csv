@@ -1,0 +1,5 @@
+region;orders;revenue;cost;profit;profit_margin_pct;average_discount_pct;loss_making_orders;loss_making_order_rate_pct
+EU;3338;533005.54;527115.4;5890.14;1.11;21.39;1119;33.52
+LATAM;1548;265094.55;249206.41;15888.14;5.99;18.33;426;27.52
+APAC;2693;475629.67;401280.74;74348.93;15.63;15.77;134;4.98
+NA;4421;780859.4;662945.86;117913.54;15.1;15.02;242;5.47

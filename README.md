@@ -1,220 +1,130 @@
-# E-commerce Profit Leak Analysis — Margin, Discount & Regional Profitability
+# E-commerce Profit Leak Analysis — SQL & Tableau Dashboard
 
-![Dashboard preview](dashboard.png)
+![Profit Leak Dashboard](dashboard.png)
 
-Portfolio case for **junior Data Analyst / Business Analyst** roles.
+**Portfolio project for Data Analyst / BI Analyst roles (alternance).**
 
-This project connects order-level data to a clear profitability story: where the company makes money, where it loses margin, how discounting affects profit, and which actions a business team should prioritize.
+This project analyzes e-commerce profitability to identify where revenue does not translate into profit, using **SQL**, **Python** and **Tableau**. The workflow moves from order-level data to business metrics, profit leak segments, discount impact, and actionable recommendations.
 
----
-
-## Executive summary
-
-Revenue looks healthy, but margin is thin and uneven.
-
-In this dataset, the business generated:
-
-- **$2,054,589.16** revenue
-- **$214,040.75** profit
-- **10.42%** overall profit margin
-- **12,000** orders
-- Period analyzed: **January 2024 → December 2025**
-
-The analysis shows that the profitability issue is not caused by low revenue. The problem is **margin erosion in specific regions, product categories and discount bands**.
-
-Main findings:
-
-- **Electronics in EU** is the largest profit leak: **-$42,103.66** profit and **-17.53%** margin.
-- **EU region overall** generates **$533,005.54** revenue but only **$5,890.14** profit, with a margin of **1.11%**.
-- **Orders with discount ≥ 25%** generated **-$40,234.94** profit.
-- **16.01%** of orders are loss-making.
-
-Main business conclusion: the company should not only chase revenue. It should monitor profit by region, category and discount band, and introduce margin-based discount guardrails.
+**Period analyzed:** January 2024 → December 2025 · **12,000 orders**
 
 ---
 
-## The profitability problem
+## Stack
 
-The core question is not:
-
-> Are we selling enough?
-
-The real question is:
-
-> Which sales build profit, and which sales destroy it?
-
-A business can grow revenue while destroying margin if discounts, costs or regional execution are not controlled. This project shows how a Data Analyst can identify those leaks and turn them into business recommendations.
+| Layer | Role |
+|-------|------|
+| **SQL / DuckDB** | Schema, staging view, KPI queries, profit leak segments, discount impact, monthly trend — **source of business metrics** |
+| **Python / pandas** | Dataset generation, validation and export automation |
+| **Tableau** | Profitability dashboard and business visualization |
+| **CSV outputs** | Tableau-ready aggregated files in `outputs/tableau/` |
 
 ---
 
-## Key profit leaks
+## Key results
 
-| Priority | Leak | What the data shows | Why it matters |
-|---|---|---|---|
-| 1 | **Electronics in EU** | Profit **-$42,103.66**, margin **-17.53%**, average discount **30.25%** | Largest single drain. This segment alone erodes nearly 20% of total company profit. |
-| 2 | **EU region overall** | Revenue **$533,005.54**, profit only **$5,890.14**, margin **1.11%** | High revenue with almost no margin suggests pricing, discount or cost-to-serve issues. |
-| 3 | **Home & Kitchen in LATAM** | Profit **-$3,983.51**, margin **-8.37%** | Secondary loss pocket that needs targeted review. |
-| 4 | **Loss-making orders** | **16.01%** of orders are loss-making | One in six orders destroys value at transaction level. |
-
-Other regions perform much better on margin. This makes the EU result stand out as a regional profitability imbalance, not a general business slowdown.
-
----
-
-## Discount impact
-
-Discounting is not neutral in this dataset.
-
-- Orders with discount **≥ 25%** generated **-$40,234.94** profit.
-- Orders with discount **below 15%** generated **$166,114.56** profit.
-
-Margin also collapses by discount band:
-
-| Discount band | Profit margin |
-|---|---:|
-| 0–5% | **34.84%** |
-| 30–45% | **-14.75%** |
-
-Business interpretation:
-
-The company is at risk of buying revenue with discounts that the profit and loss cannot support. Promotional decisions should be reviewed against margin, not only against revenue or units sold.
+| KPI | Value |
+|-----|------:|
+| Total orders | 12,000 |
+| Total revenue | $2,054,589 |
+| Total profit | $214,041 |
+| Profit margin | 10.42% |
+| Average discount | 17.39% |
+| Loss-making order rate | 16.01% |
 
 ---
 
-## Priority actions
+## Main business insight
 
-### P0 — Stop unguarded deep discounts
+The main profit leak is concentrated in the **Electronics / EU** segment, while **high discount levels** strongly reduce margin. The priority is to **control discounting**, **review pricing rules**, and **monitor weak category–region segments** before scaling revenue.
 
-Introduce margin-based discount guardrails:
+Supporting findings:
 
-- discount caps by category and region
-- approval workflow above a certain discount threshold
-- alerts when projected margin becomes negative
-- weekly review of discount-band profitability
-
-This directly addresses the negative profit from orders discounted at **25% or more**.
-
-### P0 — EU commercial reset
-
-EU has strong revenue but almost no margin.
-
-Recommended review:
-
-- pricing strategy
-- promotion depth
-- logistics and cost-to-serve
-- category-level margin
-- especially **Electronics in EU**
-
-### P1 — LATAM Home & Kitchen investigation
-
-Home & Kitchen in LATAM shows negative profitability. The business should review:
-
-- supplier costs
-- shipping and fulfillment
-- local pricing
-- promotional exposure
-
-### P1 — Shift from volume-only KPIs
-
-Revenue alone is not enough.
-
-Recommended KPIs:
-
-- revenue
-- profit
-- profit margin
-- loss-making order rate
-- discount-band margin
-- category × region profitability
+| Focus | Insight |
+|-------|---------|
+| Worst segment | Electronics / EU — **-$42,104** profit, **-17.53%** margin |
+| Weak region | EU — high revenue, **1.11%** margin |
+| Deep discounts | Orders with discount **≥ 25%** — negative aggregate profit |
+| Loss-making orders | **16.01%** of orders have `profit < 0` |
 
 ---
 
-## Dashboard usage
+## SQL methodology
 
-The dashboard image and the outputs in `outputs/` are designed for weekly or monthly business review.
+- **Canonical data source:** `data/ecommerce_orders.csv`
+- **Core formulas:**
+  - `profit = revenue - cost`
+  - `profit_margin = profit / revenue`
+- **Analysis dimensions:** product category, region, category × region, discount band, customer, month
+- **Loss-making orders:** orders where `profit < 0`
+- **SQL is the source of business metrics**; Python validates and exports; Tableau presents the story
 
-| Stakeholder question | Where to look |
-|---|---|
-| Are we improving overall profitability? | Total revenue, profit and overall margin |
-| Which region is dragging margin? | Region view, especially EU vs NA/APAC |
-| Which category burns cash? | Category × region analysis |
-| Are promotions still safe? | Discount-band profitability |
-| How bad is transaction-level leakage? | Loss-making order rate |
+SQL layer (`sql/`):
 
-The goal is to catch profit leaks early instead of discovering them after quarterly results.
+| File | Purpose |
+|------|---------|
+| `00_schema.sql` | Raw table definition |
+| `01_load_duckdb.sql` | Load canonical CSV into DuckDB |
+| `02_staging_profit_view.sql` | View `stg_orders_profit` (profit, margin, discount bands) |
+| `03`–`11` | KPIs, category, region, segments, discounts, customers, trends |
 
----
-
-## Expected business impact
-
-This project does not claim a tested financial uplift. That would require experiments, pilots or updated operational data.
-
-However, if the recommended actions work, the business should expect:
-
-- fewer loss-making orders
-- better margin control on high-discount campaigns
-- improved EU profitability
-- more sustainable growth
-- less dependence on revenue growth alone
-
-The largest numerical opportunity shown in the data is closing or repricing the **Electronics EU** leak and reducing reliance on discount bands that generate negative margin.
+See [sql/README.md](sql/README.md) for run order and details.
 
 ---
 
-## What I would present to a business team
+## Tableau artifacts
 
-Problem:
+| Artifact | Description |
+|----------|-------------|
+| [dashboard.png](dashboard.png) | Dashboard preview (GitHub) |
+| [tableau/profit_leak_dashboard.twb](tableau/profit_leak_dashboard.twb) | Tableau workbook |
 
-The company generates strong revenue, but profitability is weakened by specific loss-making segments and aggressive discounting.
-
-Finding:
-
-Electronics in EU generated **-$42,103.66** profit with a **-17.53%** margin, while orders discounted at **25% or more** generated **-$40,234.94** profit in aggregate.
-
-Decision:
-
-Introduce margin-based discount guardrails, review EU pricing, and monitor profitability by region, category and discount band.
-
-Expected impact:
-
-Reduce loss-making orders, protect margin, and improve profit quality without depending only on revenue growth.
+Expected dashboard views: executive KPIs, profit by category and region, category × region profit leaks, discount impact on margin, monthly profit trend, top customers.
 
 ---
 
-## Objectives
+## Tableau-ready exports (`outputs/tableau/`)
 
-- Identify loss-making segments across product categories and regions.
-- Analyze the impact of discounting on profitability.
-- Detect structural weaknesses in business performance.
-- Provide data-driven recommendations to restore margin.
-- Translate technical analysis into business actions.
+Semicolon-delimited CSV files (`;`) for French Tableau locale, generated from SQL via DuckDB:
+
+- `outputs/tableau/kpi_overview.csv`
+- `outputs/tableau/profit_by_category.csv`
+- `outputs/tableau/profit_by_region.csv`
+- `outputs/tableau/category_region_segments.csv`
+- `outputs/tableau/discount_impact.csv`
+- `outputs/tableau/top_customers.csv`
+- `outputs/tableau/loss_making_orders.csv`
+- `outputs/tableau/monthly_trend.csv`
+- `outputs/tableau/high_discount_impact.csv`
 
 ---
 
-## Project structure
+## Data warning
+
+> **Do not use** `data/cleaned_dataset.csv` as the source of truth. A previous cleaning step may transform the region value **NA** (North America) into **Unknown**, which breaks regional analysis.
+>
+> **Canonical source:** `data/ecommerce_orders.csv`
+
+See [docs/data_dictionary.md](docs/data_dictionary.md).
+
+---
+
+## Repository structure
 
 ```text
-ecommerce-profit-leak-analysis/
+01_profit_leak_case/
 ├── data/
-│   └── ecommerce_orders.csv
+│   └── ecommerce_orders.csv          # Canonical source
+├── sql/                              # DuckDB SQL layer (00–11)
 ├── scripts/
-│   ├── generate_dataset.py
-│   └── analyze_profit_leaks.py
-├── sql/
-│   └── profit_analysis_queries.sql
+│   ├── generate_dataset.py           # Synthetic data
+│   ├── analyze_profit_leaks.py       # Python validation & charts
+│   └── export_tableau_outputs.py       # DuckDB → outputs/tableau/
 ├── outputs/
-│   ├── ecommerce_orders_with_profit.csv
-│   ├── profit_by_category.csv
-│   ├── profit_by_region.csv
-│   ├── discount_impact.csv
-│   ├── top_10_profitable_customers.csv
-│   ├── worst_loss_making_segments.csv
-│   ├── profit_by_category.png
-│   ├── profit_by_region.png
-│   ├── discount_impact_on_margin.png
-│   ├── top_10_profitable_customers.png
-│   ├── worst_loss_making_segments.png
-│   └── key_findings_summary.json
+│   └── tableau/                      # Tableau-ready CSV exports
+├── tableau/
+│   └── profit_leak_dashboard.twb
+├── docs/                             # Methodology, data dictionary, business questions
 ├── dashboard.png
 ├── requirements.txt
 └── README.md
@@ -222,175 +132,79 @@ ecommerce-profit-leak-analysis/
 
 ---
 
-## Dataset overview
-
-| Metric | Value |
-|---|---:|
-| Total orders | 12,000 |
-| Revenue | $2,054,589.16 |
-| Profit | $214,040.75 |
-| Overall margin | 10.42% |
-| Date range | January 2024 → December 2025 |
-
-Dimensions:
-
-- product category
-- region
-- customer ID
-- order date
-- discount
-
-Columns:
-
-```text
-order_id
-customer_id
-product_category
-region
-order_date
-revenue
-cost
-discount
-```
-
----
-
-## Analytical approach
-
-The analysis follows a simple business logic:
-
-1. Calculate profit at order level.
-2. Calculate profit margin.
-3. Aggregate performance by product category.
-4. Aggregate performance by region.
-5. Analyze discount bands.
-6. Identify loss-making segments.
-7. Export CSV, JSON and chart outputs.
-8. Translate findings into business recommendations.
-
-Main formulas:
-
-```text
-profit = revenue - cost
-profit_margin = profit / revenue
-```
-
----
-
-## SQL analysis
-
-The SQL file reproduces the main business aggregates:
-
-- total revenue
-- total profit
-- overall profit margin
-- profit by category
-- profit by region
-- discount-band profitability
-- loss-making segments
-
-SQL is included to show that the analysis can be translated into a database environment, not only Python.
-
----
-
-## Tools used
-
-- Python
-- pandas
-- matplotlib
-- SQL
-- CSV analysis
-- business analytics
-- data storytelling
-
----
-
 ## How to reproduce
 
-Run the project from the repository root.
-
-### 1. Install dependencies
+From the repository root:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Generate the dataset
+**1. Generate data (optional — CSV already included)**
 
 ```bash
 python scripts/generate_dataset.py
 ```
 
-### 3. Run the analysis
+**2. Export SQL metrics for Tableau**
+
+```bash
+python scripts/export_tableau_outputs.py
+```
+
+Creates `data/profit_leak.duckdb` and refreshes `outputs/tableau/*.csv`.
+
+**3. Python validation (optional)**
 
 ```bash
 python scripts/analyze_profit_leaks.py
 ```
 
-### 4. Review outputs
+Writes additional aggregates and charts under `outputs/`.
 
-Main outputs are generated in:
+**4. Tableau**
 
-```text
-outputs/
-```
-
-Expected outputs:
-
-```text
-outputs/key_findings_summary.json
-outputs/profit_by_category.csv
-outputs/profit_by_region.csv
-outputs/discount_impact.csv
-outputs/worst_loss_making_segments.csv
-outputs/top_10_profitable_customers.csv
-outputs/profit_by_category.png
-outputs/profit_by_region.png
-outputs/discount_impact_on_margin.png
-outputs/worst_loss_making_segments.png
-```
+Open `tableau/profit_leak_dashboard.twb` or connect to `outputs/tableau/` CSVs or `data/profit_leak.duckdb`.
 
 ---
 
-## Dataset note
+## Business recommendations
 
-This project uses a portfolio e-commerce order dataset to demonstrate a complete business profitability analysis workflow.
-
-The goal is to show how a Data Analyst can move from raw order-level data to profit metrics, margin diagnosis, discount analysis, visual outputs and business recommendations.
-
-The analysis does not claim real company performance or tested business impact. Recommendations are directional and should be validated with business review, experiments or updated operational data.
-
----
-
-## Interview explanation
-
-I analyzed e-commerce orders to explain why strong revenue did not translate into strong profitability.
-
-I built profit at order level, then cut the data by category, region and discount band. The standout issue was Electronics in EU, which showed negative profit and negative margin. I also found that orders discounted at 25% or more generated negative profit overall.
-
-My recommendations were to introduce margin-based discount guardrails, review EU pricing and promotions, and monitor profitability weekly by region, category and discount band.
+| Priority | Action |
+|----------|--------|
+| **P0** | Margin-based discount guardrails (caps by category/region, approval above threshold) |
+| **P0** | EU commercial reset — pricing, promotions, cost-to-serve; focus on Electronics / EU |
+| **P1** | Monitor category × region segments weekly (profit, margin, loss-making rate) |
+| **P1** | Shift KPIs from revenue-only to profit, margin, discount-band performance |
 
 ---
 
 ## Skills demonstrated
 
-- Data cleaning
-- Profitability analysis
-- Business KPI analysis
-- SQL aggregation
-- Python analysis with pandas
-- Discount impact analysis
-- Loss-making segmentation
-- Data visualization
-- Business recommendations
-- Analytical storytelling
+- SQL (DuckDB): CTEs, aggregations, `CASE`, window functions, staging views
+- Python: pandas, pipeline automation, export to Tableau-ready files
+- Tableau: KPI dashboard, profitability and discount storytelling
+- Business analysis: profit leaks, margin erosion, discount impact, recommendations
 
 ---
 
-## Conclusion
+## Documentation
 
-The profitability problem is not mainly a revenue problem.
+- [docs/methodology.md](docs/methodology.md) — metrics, dimensions, tool roles
+- [docs/data_dictionary.md](docs/data_dictionary.md) — canonical schema and calculated fields
+- [docs/business_questions.md](docs/business_questions.md) — analytical questions answered
+- [tableau/README.md](tableau/README.md) — dashboard and data source rules
 
-It is a margin erosion problem concentrated in specific segments and discount tiers. Electronics in EU is the first priority, EU regional margin is the second priority, Home & Kitchen in LATAM is the third priority, and deep discounting is the cross-cutting lever.
+---
 
-Controlling discounts, monitoring margins and tightening commercial execution can improve profit quality without assuming revenue growth.
+## Dataset note
+
+Synthetic portfolio dataset for demonstration. Results are directional and do not represent real company performance. Recommendations should be validated with business review and operational data.
+
+---
+
+## Interview pitch (60 seconds)
+
+I analyzed e-commerce orders to find where revenue fails to convert into profit. I built a **DuckDB SQL layer** for official KPIs — profit by category, region, and segment, discount bands, and loss-making order rate — then exported **Tableau-ready files** and built a **profitability dashboard**.
+
+The main leak is **Electronics in EU**; **high discounts** erode margin. I recommend **discount guardrails**, **EU pricing review**, and **weekly monitoring** of weak category–region segments before pushing revenue growth.

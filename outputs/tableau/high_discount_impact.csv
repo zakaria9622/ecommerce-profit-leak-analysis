@@ -1,0 +1,4 @@
+discount_group;orders;revenue;profit;profit_margin_pct;loss_making_order_rate_pct
+Low discount (< 15%);4871;800344.12;166114.56;20.76;0.78
+Medium discount (15% to 25%);5240;909699.67;88161.13;9.69;12.82
+High discount (>= 25%);1889;344545.37;-40234.94;-11.68;64.11
