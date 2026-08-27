@@ -2,7 +2,7 @@
 
 ![Profit Leak Dashboard](dashboard.png)
 
-**Portfolio case study for Marketing Data Analyst roles, focused on e-commerce profitability, discount efficiency and margin diagnostics.**
+**Business analysis portfolio project: profitability and performance analysis, margin KPI and reporting to support commercial decisions.**
 
 This project analyzes e-commerce profitability to identify where revenue does not translate into profit, using **SQL**, **Python** and **Tableau**. The workflow moves from order-level data to business metrics, profit leak segments, discount impact, and actionable recommendations.
 
